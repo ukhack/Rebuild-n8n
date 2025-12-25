@@ -138,10 +138,6 @@ jobs:
         run: |
           ls -la node_modules/zx/ 2>/dev/null && echo "zx 已安装" || echo "zx 未安装"
 
-      - name: 依赖更新
-        run: |
-          pnpm update
-
       - name: 预编译
         run: |
           node scripts/build-n8n.mjs
