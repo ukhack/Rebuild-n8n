@@ -2,12 +2,23 @@
 import requests
 import re
 import sys
+import time
 from packaging import version
+
+MAX_RETRIES = 3
 
 def get_latest_version():
     url = "https://api.github.com/repos/n8n-io/n8n/releases"
-    response = requests.get(url)
-    response.raise_for_status()
+    response = None
+    for attempt in range(MAX_RETRIES):
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            break
+        except requests.exceptions.RequestException:
+            if attempt == MAX_RETRIES - 1:
+                raise
+            time.sleep(2 ** attempt)
     
     releases = response.json()
     
